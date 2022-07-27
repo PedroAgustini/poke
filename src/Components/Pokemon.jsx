@@ -44,68 +44,107 @@ const Pokemon = () => {
     }
 
     return (
-        <div className="pokemon">
-          <div className="pokemon-container">
-            <div className="pokemon-header">
-              <img src={Header} alt="" />
-            </div>
-            <div className="pokemon-greeting text-align-center margin-btm1rem">
-              <p className="margin-btm1rem"><span className="greeting bold p-medium">Bienvenido {welcome}</span></p>
-              <p>aquí podrás encontrar tu pokemón favorito</p>
-            </div>
-            <div className="pokemon-input width-90 text-align-center">
-              {changeInput ? (
-                <>
-                  <form action="" className="margin-btm1rem">
-                    <select onChange={typePokemon} id="search-category">
-                      <option value="">Seleccione el tipo de pokemon</option>
-                      {
-                        types.map((type) => (
-                          <option value={type.url} key={type.url}>
-                          {type.name}
-                          </option>
-                        ))
-                      }
-                     </select>
-                  </form>
-                </>
-              ) : (
-                <>
-                  <form action="" className="margin-btm1rem">
-                    <input type="text" placeholder="Busca un pokemon" className="input-name"/>
-                    <button type="submit" className="btn-submit">Buscar</button>
-                  </form>
-                </>
-              )}
-              <button type="button" className="margin-btm1rem" onClick={() => dispatch(change())}><i className="fa-solid fa-arrows-rotate icon-change"></i></button>
-                <div>
-                  <button onClick={() => setPage(page-1)} disabled={page === 1}>Prev page</button>
-                  {numbers.map(number => (
-                    <button onClick={() => setPage(number)}> {number} </button>
-                  ))}
-                  <button onClick={() => setPage(page+1)} disabled={page === lastPage}>Next page </button>
-                </div>
-            </div>
-            <div className="pokemon-card">
-              <div className="card-flex">
-                {
-                  pokemonsPaginated.map(character => (
-                    <PokemonCard Url={character.url ? character.url : character.pokemon.url} 
-                    key={character.url ? character.url : character.pokemon.url}
-                    />
-                  ))
-                }
+      <div className="pokemon">
+        <div className="pokemon-container">
+          <div className="pokemon-header">
+            <img src={Header} alt="" />
+          </div>
+          <div className="pokemon-greeting text-align-center margin-btm1rem">
+            <p className="margin-btm1rem">
+              <span className="greeting bold p-medium">
+                Bienvenido {welcome}
+              </span>
+            </p>
+            <p>aquí podrás encontrar tu pokemón favorito</p>
+          </div>
+          <div className="pokemon-input width-90 text-align-center">
+            {changeInput ? (
+              <>
+                <form action="" className="margin-btm1rem">
+                  <select onChange={typePokemon} id="search-category">
+                    <option value="">Seleccione el tipo de pokemon</option>
+                    {types.map((type) => (
+                      <option value={type.url} key={type.url}>
+                        {type.name}
+                      </option>
+                    ))}
+                  </select>
+                </form>
+              </>
+            ) : (
+              <>
+                <form action="" className="margin-btm1rem">
+                  <input
+                    type="text"
+                    placeholder="Busca un pokemon"
+                    className="input-name"
+                  />
+                  <button type="submit" className="btn-submit">
+                    Buscar
+                  </button>
+                </form>
+              </>
+            )}
+            <button
+              type="button"
+              className="margin-btm1rem"
+              onClick={() => dispatch(change())}
+            >
+              <i className="fa-solid fa-arrows-rotate icon-change"></i>
+            </button>
+            <div className="container-pagination">
+              <div>
+                <button
+                  className="btn-pagination"
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                >
+                  Prev page
+                </button>
+              </div>
+              <div>
+                <button
+                  className="btn-pagination"
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === lastPage}
+                >
+                  Next page{" "}
+                </button>
               </div>
             </div>
           </div>
-          <div>
-                  <button onClick={() => setPage(page-1)} disabled={page === 1}>Prev page</button>
-                  {numbers.map(number => (
-                    <button onClick={() => setPage(number)}> {number} </button>
-                  ))}
-                  <button onClick={() => setPage(page+1)} disabled={page === lastPage}>Next page </button>
-                </div>
+          <div className="pokemon-card">
+            <div className="card-flex">
+              {pokemonsPaginated.map((character) => (
+                <PokemonCard
+                  Url={character.url ? character.url : character.pokemon.url}
+                  key={character.url ? character.url : character.pokemon.url}
+                />
+              ))}
+            </div>
+          </div>
         </div>
+            <div className="container-pagination">
+              <div>
+                <button
+                  className="btn-pagination pagination-m-top"
+                  onClick={() => setPage(page - 1)}
+                  disabled={page === 1}
+                >
+                  Prev page
+                </button>
+              </div>
+              <div>
+                <button
+                  className="btn-pagination pagination-m-top"
+                  onClick={() => setPage(page + 1)}
+                  disabled={page === lastPage}
+                >
+                  Next page{" "}
+                </button>
+              </div>
+            </div>
+      </div>
     );
 };
 
