@@ -8,10 +8,11 @@ import { change } from "../store/slices/changeInput";
 const Pokemon = () => {
     const [characters, setCharacters] = useState([])
     const [ types, setTypes ] =useState([]);
+    const [ item, setItem ] = useState([])
 
     useEffect(() => {
       axios
-            .get(`https://pokeapi.co/api/v2/pokemon/`)
+            .get(`https://pokeapi.co/api/v2/pokemon/?offsset=0&limit=1154`)
             .then((res) => setCharacters(res.data.results))
 
       axios
@@ -20,14 +21,28 @@ const Pokemon = () => {
     },[])
 
     const typePokemon = (e) => {
+      alert(e.target.value)
       axios.get(e.target.value)
-      .then((res) => setCharacters(res.data))
+      .then((res) => setTypes(res.data.pokemon))
 }
 
     const welcome = useSelector((state) => state.input)
     const changeInput = useSelector((state) => state.change)
     const dispatch = useDispatch()
     console.log(changeInput)
+
+    const [ page, setPage ] = useState(1);
+    const lastIndex = page * 20
+    const firstIndex = lastIndex - 20
+    const pokemonsPaginated = characters.slice(firstIndex, lastIndex)
+
+    const lastPage = Math.ceil(characters.length / 20)
+
+    const numbers = [];
+    for(let i = 1; i <= lastPage; i++){
+      numbers.push(i)
+    }
+
     return (
         <div className="pokemon">
           <div className="pokemon-container">
@@ -63,17 +78,33 @@ const Pokemon = () => {
                 </>
               )}
               <button type="button" className="margin-btm1rem" onClick={() => dispatch(change())}><i className="fa-solid fa-arrows-rotate icon-change"></i></button>
+                <div>
+                  <button onClick={() => setPage(page-1)} disabled={page === 1}>Prev page</button>
+                  {numbers.map(number => (
+                    <button onClick={() => setPage(number)}> {number} </button>
+                  ))}
+                  <button onClick={() => setPage(page+1)} disabled={page === lastPage}>Next page </button>
+                </div>
             </div>
             <div className="pokemon-card">
               <div className="card-flex">
                 {
-                  characters.map(character => (
-                    <PokemonCard Url={character.url} key={character.url}/>
+                  pokemonsPaginated.map(character => (
+                    <PokemonCard Url={character.url ? character.url : character.pokemon.url} 
+                    key={character.url ? character.url : character.pokemon.url}
+                    />
                   ))
                 }
               </div>
             </div>
           </div>
+          <div>
+                  <button onClick={() => setPage(page-1)} disabled={page === 1}>Prev page</button>
+                  {numbers.map(number => (
+                    <button onClick={() => setPage(number)}> {number} </button>
+                  ))}
+                  <button onClick={() => setPage(page+1)} disabled={page === lastPage}>Next page </button>
+                </div>
         </div>
     );
 };
@@ -81,8 +112,3 @@ const Pokemon = () => {
 export default Pokemon;
 
 
-
-<form action="" className="margin-btm1rem">
-<input type="text" placeholder="Busca un pokemon" className="input-name"/>
-<button type="submit" className="btn-submit">Buscar</button>
-</form>
