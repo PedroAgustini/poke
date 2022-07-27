@@ -3,12 +3,18 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import PokemonCard from "./PokemonCard";
 import { useDispatch, useSelector } from "react-redux";
-import { change } from "../store/slices/changeInput";
+import { useNavigate } from "react-router-dom";
+import inputSearch from "../store/slices/inputSearch";
+
+
+
 
 const Pokemon = () => {
     const [characters, setCharacters] = useState([])
     const [ types, setTypes ] =useState([]);
     const [ item, setItem ] = useState([])
+    const [ inputSearch, setInputSearch] = useState([])
+    
 
     useEffect(() => {
       axios
@@ -24,12 +30,24 @@ const Pokemon = () => {
       alert(e.target.value)
       axios.get(e.target.value)
       .then((res) => setTypes(res.data.pokemon))
+      navigate(`/pokemon/${types}`)
 }
+
+    
 
     const welcome = useSelector((state) => state.input)
     const changeInput = useSelector((state) => state.change)
     const dispatch = useDispatch()
-    console.log(changeInput)
+    const navigate = useNavigate()
+    const search = (e) => {
+      e.preventDefault()
+      if(inputSearch) {
+        navigate(`/pokemon/${inputSearch.toLowerCase()}`)
+      } else {
+        alert("Error")
+      }
+    }
+    
 
     const [ page, setPage ] = useState(1);
     const lastIndex = page * 20
@@ -58,9 +76,9 @@ const Pokemon = () => {
             <p>aquí podrás encontrar tu pokemón favorito</p>
           </div>
           <div className="pokemon-input width-90 text-align-center">
-            {changeInput ? (
+            
               <>
-                <form action="" className="margin-btm1rem">
+                <form action="" className="margin-btm1rem" onSubmit={typePokemon}>
                   <select onChange={typePokemon} id="search-category">
                     <option value="">Seleccione el tipo de pokemon</option>
                     {types.map((type) => (
@@ -71,27 +89,22 @@ const Pokemon = () => {
                   </select>
                 </form>
               </>
-            ) : (
+            
               <>
-                <form action="" className="margin-btm1rem">
+                <form action="" className="margin-btm1rem" onSubmit={search}>
                   <input
                     type="text"
                     placeholder="Busca un pokemon"
                     className="input-name"
+                    value={inputSearch} onChange={(e) => setInputSearch(e.target.value)}                
                   />
                   <button type="submit" className="btn-submit">
                     Buscar
                   </button>
                 </form>
               </>
-            )}
-            <button
-              type="button"
-              className="margin-btm1rem"
-              onClick={() => dispatch(change())}
-            >
-              <i className="fa-solid fa-arrows-rotate icon-change"></i>
-            </button>
+            
+            
             <div className="container-pagination">
               <div>
                 <button

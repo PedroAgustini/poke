@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ImageTitle from "./Images/Title-image.png"
-import { welcome } from "../store/slices/inputWelcome.slices";
+
 
 const Home = () => {
     const [inputValue, setInputValue] = useState("");
@@ -10,13 +10,8 @@ const Home = () => {
     const dispatch = useDispatch()
     const submitName = (e) => {
       e.preventDefault()
-      if(inputValue !== "") {
-        navigate("/pokemon")
-        setInputValue("")
-        dispatch(welcome(inputValue))
-      } else {
-        console.log("Incorrecto!!")
-      }
+      navigate("/pokemon")
+ 
     }
     return (
         <div className="home">
@@ -30,7 +25,13 @@ const Home = () => {
             </div>
             <div className="home-input">
               <form action="" onSubmit={submitName}>
-                <input type="text" placeholder="Tú nombre..." className="input-name" value={inputValue} onChange={(e) => setInputValue(e.target.value)}/>
+                <input 
+                type="text" 
+                placeholder="Tú nombre..." 
+                className="input-name" 
+                value={inputValue} 
+                onChange={(e) => setInputValue(e.target.value)}
+                />
                 <button type="submit" className="btn-submit">Comenzar</button>
               </form>
             </div>
